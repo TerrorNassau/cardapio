@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("food")
@@ -34,4 +35,42 @@ public class FoodController {
         return foodList;
 
     }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @DeleteMapping
+    public void deleteAll() {
+        repository.deleteAll();
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @DeleteMapping("/{id}")
+    public void deleteFood(@PathVariable Long id) {
+        repository.deleteById(id);
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping
+    public void updateAll(@RequestBody List<FoodRequestDTO> foodList) {
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("/{id}")
+    public void updateFood(@PathVariable Long id, @RequestBody FoodRequestDTO data) {
+    }
+
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/{id}")
+    public FoodResponseDTO getFoodDetails(@PathVariable Long id) {
+        Optional<Food> optionalFood = repository.findById(id);
+
+        if (optionalFood.isPresent()) {
+            FoodResponseDTO foodDetails = new FoodResponseDTO(optionalFood.get());
+            return foodDetails;
+        } else {
+
+            return null;
+        }
+    }
+
 }
